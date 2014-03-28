@@ -33,7 +33,7 @@ type
 
 const
   AppTitle:  String = 'Strip-0x00';
-  Version:   String = '1.0';
+  Version:   String = '1.1';
 
 
 { TStrip }
@@ -73,22 +73,24 @@ begin
 
   // parse parameters
   if (HasOption('h','help')) or (ParamCount=0) then
-  begin
-    WriteHelp;
-    Terminate;
-    Exit;
-  end;
+    begin
+      WriteHelp;
+      Terminate;
+      Exit;
+    end;
+  if ParamCount=1 then
+    InputFile:=ParamStr(1);
   if HasOption('1','mode1') then
     begin
       StripMode:=1;
       writeln('Mode 1: strip appending 0x00 bytes');
     end
-  else if (HasOption('2','mode2')) or (ParamCount=0) then
+  else if HasOption('2','mode2') then
     begin
       StripMode:=2;
       writeln('Mode 2: strip leading 0x00 bytes');
     end
-  else if (HasOption('3','mode3')) or (ParamCount=0) then
+  else if HasOption('3','mode3') then
     begin
       StripMode:=3;
       writeln('Mode 3: strip appending and leading 0x00 bytes');
@@ -100,7 +102,8 @@ begin
     end;
 
   //set files
-  InputFile:=GetOptionValue('i', 'input');
+  if InputFile='' then
+    InputFile:=GetOptionValue('i', 'input');
   if FileExists(InputFile)=false then
     begin
       writeln('');
@@ -120,7 +123,7 @@ begin
   //check offset for last leading 0x00 byte in input file
   if StripMode<>1 then
     begin
-      write('Checking offset for last leading 0x00 byte in input file...');
+      write('Checking offset for last leading 0x00 byte in input file...   ');
       InputPos:=0;
       WorkByte:=$0;
       while InputPos<InputStream.Size do
@@ -130,22 +133,26 @@ begin
           if Workbyte<>$0 then break;
           inc(InputPos);
         end;
-      write('   0x'+IntToHex(InputPos,8)+#13#10);
-      if InputPos=$0 then
+      write('0x'+IntToHex(InputPos,8)+#13#10);
+      //quit when in mode2 no leading 0x00 bytes are found
+      if (InputPos=$0) or (InputPos>=InputStream.Size) then
         begin
-          writeln('');
-          writeln('Error: no leading 0x00 bytes found!');
-          writeln('');
-          Terminate;
-          Exit;
+          if StripMode=2 then
+            begin
+              writeln('');
+              writeln('Error: can not strip empty image!');
+              write('Error: Last leading 0x00 byte at file end postion 0x'+IntToHex(InputPos,8)+' = zeroed file'+#13#10);
+              writeln('');
+              Terminate;
+              Exit;
+            end;
         end;
     end;
-
 
   //check offset for first appended 0x00 byte in input file
   if StripMode<>2 then
     begin
-      write('Checking offset for first appended 0x00 byte in input file...');
+      write('Checking offset for first appended 0x00 byte in input file... ');
       InputPos2:=InputStream.Size-1;
       WorkByte:=$0;
       while InputPos2>0 do
@@ -155,7 +162,7 @@ begin
           if Workbyte<>$0 then break;
           dec(InputPos2);
         end;
-      write(' 0x'+IntToHex(InputPos2,8)+#13#10);
+      write('0x'+IntToHex(InputPos2,8)+#13#10);
       if InputPos2=InputStream.Size-1 then
         begin
           writeln('');
@@ -166,47 +173,68 @@ begin
         end;
     end;
 
+  //prevent 1 byte size file in strip mode 1 in case the source image is full of 0x00 bytes
+  if StripMode=1 then
+    begin
+      if InputPos2=0 then
+        begin
+          writeln('');
+          writeln('Error: can not strip empty image!');
+          write('Error: First appended 0x00 byte at start postion 0x'+IntToHex(0,8)+' = zeroed file'+#13#10);
+          writeln('');
+          Terminate;
+          Exit;
+        end;
+    end;
+
+  //prevent zero size file in strip mode 3 in case the source image is full of 0x00 bytes or when both position are equal
+  if StripMode=3 then
+    begin
+      if InputPos2-InputPos+1<=0 then
+        begin
+          writeln('');
+          writeln('Error: can not strip empty image!');
+          writeln('Error: completely zeroed file!');
+          writeln('');
+          Terminate;
+          Exit;
+        end;
+      if InputPos2=InputPos then
+        begin
+          writeln('');
+          writeln('Error: position of appended and leading 0x00 bytes equal! Set leading position back to 0x00!');
+          writeln('');
+          InputPos:=0;
+        end;
+    end;
+
   //Create new output file
   if FileExists(OutputFile) then
     DeleteFile(OutputFile);
   OutputStream:=TFileStream.Create(OutputFile,fmCreate);
 
-  //copy content from input file to output file without appended 0x00 bytes
+  //copy content from input file to output file without appended or leading 0x00 bytes
   StreamPos:=0;
-  write('Create output file without stripped 0x00 bytes...');
+  write('Create output file without stripped 0x00 bytes...             ');
   if StripMode=1 then
     begin
-      while StreamPos<InputPos2+1 do
-        begin
-          InputStream.Seek(StreamPos,0);
-          OutputStream.Seek(StreamPos,0);
-          OutputStream.CopyFrom(InputStream,1);
-          inc(StreamPos);
-        end;
+      InputStream.Seek(StreamPos,0);
+      OutputStream.Seek(0,0);
+      OutputStream.CopyFrom(InputStream,InputPos2+1);
     end;
   if StripMode=2 then
     begin
-      StreamPos:=InputPos;
-      while StreamPos<InputStream.Size do
-        begin
-          InputStream.Seek(StreamPos,0);
-          OutputStream.Seek(StreamPos-InputPos,0);
-          OutputStream.CopyFrom(InputStream,1);
-          inc(StreamPos);
-        end;
+      InputStream.Seek(InputPos,0);
+      OutputStream.Seek(0,0);
+      OutputStream.CopyFrom(InputStream,InputStream.Size-InputPos);
     end;
   if StripMode=3 then
     begin
-      StreamPos:=InputPos;
-      while StreamPos<InputPos2+1 do
-        begin
-          InputStream.Seek(StreamPos,0);
-          OutputStream.Seek(StreamPos-InputPos,0);
-          OutputStream.CopyFrom(InputStream,1);
-          inc(StreamPos);
-        end;
+      InputStream.Seek(InputPos,0);
+      OutputStream.Seek(0,0);
+      OutputStream.CopyFrom(InputStream,InputPos2-InputPos+1);
     end;
-  write('             done'+#13#10);
+  write('done'+#13#10);
 
   //compare image sizes
   writeln('Old image size                                                0x'+IntToHex(InputStream.Size,8));
@@ -241,10 +269,15 @@ begin
   { add your help code here }
   writeln(AppTitle+' removes all appended 0x00 bytes of a file for e.g. ROM dumps');
   writeln('');
-  writeln('Usage: (mode option)',ExtractFileName(ExeName),' inputfile (outputfile)');
+  writeln('Usage: ',ExtractFileName(ExeName),' (mode) -i inputfile (-o outputfile)');
+  writeln('       ',ExtractFileName(ExeName),' inputfile');
   writeln('');
-  writeln('Options:');
+  writeln('Arguments:');
   writeln('-h or --help       this help page');
+  writeln('-i or --input      inputfile');
+  writeln('-o or --output     outputfile (optional)');
+  writeln('');
+  writeln('Mode (optional):');
   writeln('-1 or --mode1      remove appended 0x00 bytes (default)');
   writeln('-2 or --mode2      remove leading 0x00 bytes');
   writeln('-3 or --mode3      remove appended and leading 0x00 bytes');
