@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="2">
+      <Unit0>
+        <Filename Value="Strip.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Strip"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="178"/>
+        <CursorPos X="27" Y="205"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="C:\lazarus\fpc\2.6.2\source\rtl\objpas\sysutils\filutilh.inc"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="41"/>
+        <CursorPos X="16" Y="63"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit1>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="25" HistoryIndex="24">
+      <Position1>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="69" Column="57" TopLine="39"/>
+      </Position1>
+      <Position2>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="66" Column="17" TopLine="42"/>
+      </Position2>
+      <Position3>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="73" Column="21" TopLine="40"/>
+      </Position3>
+      <Position4>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="65" Column="23" TopLine="43"/>
+      </Position4>
+      <Position5>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="59" Column="49" TopLine="48"/>
+      </Position5>
+      <Position6>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="70" Column="16" TopLine="46"/>
+      </Position6>
+      <Position7>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="59" Column="27" TopLine="48"/>
+      </Position7>
+      <Position8>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="66" Column="5" TopLine="47"/>
+      </Position8>
+      <Position9>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="38" Column="8" TopLine="27"/>
+      </Position9>
+      <Position10>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="35" Column="3" TopLine="16"/>
+      </Position10>
+      <Position11>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="38" Column="22" TopLine="27"/>
+      </Position11>
+      <Position12>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="89" Column="30" TopLine="70"/>
+      </Position12>
+      <Position13>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="90" Column="8" TopLine="71"/>
+      </Position13>
+      <Position14>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="89" Column="3" TopLine="65"/>
+      </Position14>
+      <Position15>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="85" Column="55" TopLine="66"/>
+      </Position15>
+      <Position16>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="93" Column="30" TopLine="68"/>
+      </Position16>
+      <Position17>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="85" Column="55" TopLine="67"/>
+      </Position17>
+      <Position18>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="38" Column="12" TopLine="27"/>
+      </Position18>
+      <Position19>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="88" Column="26" TopLine="68"/>
+      </Position19>
+      <Position20>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="86" Column="18" TopLine="69"/>
+      </Position20>
+      <Position21>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="110" Column="44" TopLine="77"/>
+      </Position21>
+      <Position22>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="113" Column="32" TopLine="87"/>
+      </Position22>
+      <Position23>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="77" Column="7" TopLine="47"/>
+      </Position23>
+      <Position24>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="70" Column="22" TopLine="58"/>
+      </Position24>
+      <Position25>
+        <Filename Value="Strip.lpr"/>
+        <Caret Line="71" Column="29" TopLine="52"/>
+      </Position25>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>
